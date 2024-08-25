@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { IBM_Plex_Sans_Thai, Noto_Sans_Thai } from "next/font/google";
 import "./globals.css";
+import Hero from "@/components/Hero";
 
-const inter = Inter({ subsets: ["latin"] });
+const font = Noto_Sans_Thai({ subsets: ["thai"], weight: ['400', '500', '600', '700', '800', '900'] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,7 +17,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={font.className}>
+        <div>
+          <Hero />
+          {children}
+        </div>
+      </body>
     </html>
   );
 }
