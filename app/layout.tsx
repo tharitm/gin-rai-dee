@@ -17,9 +17,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={font.className}>
+      <body className={`${font.className} bg-zinc-800`}>
         <div className="min-h-screen flex flex-col flex-shrink-0">
-          <Hero />
           {children}
         </div>
       </body>

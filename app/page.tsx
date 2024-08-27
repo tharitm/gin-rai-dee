@@ -1,12 +1,11 @@
 'use client'
-import Hero from "@/components/Hero";
-import { useEffect } from "react";
+import Transition from "@/components/Transition";
+import { AnimatePresence } from "framer-motion";
 
 export default function Home() {
   return (
-    <div className="flex">
-     hello
-    </div>
-  
+    <AnimatePresence>
+      <Transition />
+    </AnimatePresence>
   );
 }

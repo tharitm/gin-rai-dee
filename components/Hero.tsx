@@ -5,8 +5,16 @@ import React from 'react'
 import { TypeAnimation } from 'react-type-animation'
 import TextAnimation from './TextAnimation'
 import { ArrowRight, MoveRight } from 'lucide-react'
+import { useStepStore } from '@/lib/useStepStore'
 
 function Hero() {
+    const { setPage, setStep } = useStepStore()
+
+    const handleClick = () => {
+        setPage(2);
+        setStep(1);
+
+    };
     return (
         <section className='main h-screen flex flex-col justify-center items-center bg-zinc-800'>
             <motion.div
@@ -30,22 +38,30 @@ function Hero() {
                     </div>
                 </div>
             </motion.div>
-            <div className="text-center py-12 px-6 md:w-[50%]">
+            <motion.div className="text-center my-12 px-6 w-[80%] xl:w-[30%]"
+                initial={{ opacity: 0, y: 0 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}>
                 <p className="text-white text-xl">
-                    หิวจนไม่รู้จะกินอะไรดี? ไม่มีปัญหา! เดี๋ยวผมช่วยคิดเมนูให้คุณเอง แล้วมาลุ้นกันว่าจะมีอะไรอร่อยๆ รออยู่! 🍕🍔🥗
+                    หิวจนไม่รู้จะกินอะไรดี? ไม่มีปัญหา! เดี๋ยวเราช่วยคิดเมนูให้คุณเอง แล้วมาลุ้นกันว่าจะมีอะไรอร่อยๆ รออยู่! 🍕🍔🥗
                 </p>
+            </motion.div>
+            <div className="p-12">
+                <motion.button
+                    className="relative rounded-full bg-white p-3 text-black focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    initial={{ opacity: 0, y: 0 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ type: 'spring', stiffness: 300 }}
+                    onClick={handleClick}
+                >
+                    <MoveRight className="h-5 w-5" />
+                    <span
+                        className="absolute inset-0 rounded-full bg-transparent border-2 border-white/50 animate-ping-slow"
+                    ></span>
+                </motion.button>
             </div>
-            <motion.button
-                className="relative rounded-full bg-white p-3 text-black focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                transition={{ type: 'spring', stiffness: 300 }}
-            >
-                <MoveRight className="h-5 w-5" />
-                <span
-                    className="absolute inset-0 rounded-full bg-transparent border-2 border-white/50 animate-ping-slow"
-                ></span>
-            </motion.button>
         </section>
     )
 }
