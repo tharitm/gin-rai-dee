@@ -28,8 +28,8 @@ jobs:
             [COMMIT] => ${{ github.event.head_commit.message }}
             [ACTOR] => ${{ github.actor }}
             [***SUCCESS***]
-        sticker_id: 52002734
-        sticker-package-id: 11537
+          sticker-id: 16581271
+          sticker-package-id: 8522
 
   run-if-failed:
     runs-on: ubuntu-latest
@@ -45,5 +45,5 @@ jobs:
             [COMMIT] => ${{ github.event.head_commit.message }}
             [ACTOR] => ${{ github.actor }}
             [***FAILED***]
-          sticker-id: 11069867
-          sticker-package-id: 6359
+          sticker-id: 16581283
+          sticker-package-id: 8522
