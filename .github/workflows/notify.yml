@@ -49,8 +49,8 @@ jobs:
         message: |
           ${{steps.create_notify_message.outputs.result}}
           [***SUCCESS***]
-        sticker_id: 51626501
-        package_id: 11538
+        sticker_id: 52002734
+        package_id: 11537
   run-if-failed:
     runs-on: ubuntu-latest
     needs: [build]
@@ -85,5 +85,5 @@ jobs:
         message: |
           ${{steps.create_notify_message.outputs.result}}
           [***FAILED***]
-        sticker_id: 51626530
-        package_id: 11538
+        sticker_id: 11069858
+        package_id: 6359
