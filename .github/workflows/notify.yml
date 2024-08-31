@@ -1,0 +1,42 @@
+name: Line Notify on Push
+
+on: 
+  push:
+    branches:
+      - main  
+
+jobs:
+  run-if-success:
+    runs-on: ubuntu-latest
+    needs: [build]
+    if: success()
+    steps:
+    - name: success
+      uses: louis70109/line-notify-action@master
+      with:
+        token: ${{ secrets.LINE_NOTIFY_MYG }}
+        message: |
+          Triggered ${{github.repository}}#${{ github.ref_name }}
+          [COMMIT] => ${{ github.event.head_commit.message }}
+          [ACTOR] => ${{ github.actor }}
+          [***SUCCESS***]
+        sticker_id: 16581271
+        package_id: 8522
+  run-if-failed:
+    runs-on: ubuntu-latest
+    needs: [build]
+    if: failure()
+    steps:
+    - name: failed
+      uses: louis70109/line-notify-action@master
+      with:
+        token: ${{ secrets.LINE_NOTIFY_MYG }}
+        message: |
+          Triggered ${{github.repository}}#${{ github.ref_name }}
+          [COMMIT] => ${{ github.event.commits }}
+          [ACTOR] => ${{ github.actor }}
+          [***FAILED***]
+        sticker_id: 16581283
+        package_id: 8522
+
+      
