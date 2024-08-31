@@ -14,36 +14,76 @@ jobs:
       - name: Build and test
         run: echo "Build and test steps here"
 
+    # entronica notify contact -> chantatha.p
   run-if-success:
     runs-on: ubuntu-latest
-    needs: build
+    needs: [build]
     if: success()
     steps:
-      - name: Line Notify on Success
-        uses: louis70109/line-notify-action@master
-        with:
-          token: ${{ secrets.LINE_NOTIFY_MYG }}
-          message: |
-            Triggered ${{github.repository}}#${{ github.ref_name }}
-            [COMMIT] => ${{ github.event.head_commit.message }}
-            [ACTOR] => ${{ github.actor }}
-            [***SUCCESS***]
-          sticker-id: 16581271
-          sticker-package-id: 8522
-
+    - name: create notify message
+      uses: actions/github-script@v6
+      id: create_notify_message
+      with:
+        script: |
+          const commits = ${{ toJSON(github.event.commits) }}
+          if (commits === null) {
+            return `Build ${{github.repository}}#${{ github.ref_name }}\nManually build by ${{github.actor}}\n`
+          }
+          let string_commits = ''
+          for (let i = 0; i < 5 && i < commits.length-1 ; i++) {
+            string_commits += `- ${commits[i].message} by ${commits[i].author.username}\n`
+          }
+          if (commits.length > 5) {
+            string_commits += `... and ${commits.length - 5} more commit(s)\n`
+          }
+          let message = `Triggered ${{github.repository}}#${{ github.ref_name }}\nBuild triggered by ${{github.event.head_commit.author.username}} with commit message: ${{github.event.head_commit.message}}\n`
+          if (string_commits) {
+            message += `\nCommits:\n${string_commits}`
+          }
+          return message
+        result-encoding: string
+    - name: send notify message
+      uses: louis70109/line-notify-action@master
+      with:
+        token: ${{ secrets.LINE_NOTIFY_MYG }}
+        message: |
+          ${{steps.create_notify_message.outputs.result}}
+          [***SUCCESS***]
+        sticker_id: 51626501
+        package_id: 11538
   run-if-failed:
     runs-on: ubuntu-latest
-    needs: build
+    needs: [build]
     if: failure()
     steps:
-      - name: Line Notify on Failure
-        uses: louis70109/line-notify-action@master
-        with:
-          token: ${{ secrets.LINE_NOTIFY_MYG }}
-          message: |
-            Triggered ${{github.repository}}#${{ github.ref_name }}
-            [COMMIT] => ${{ github.event.head_commit.message }}
-            [ACTOR] => ${{ github.actor }}
-            [***FAILED***]
-          sticker-id: 16581283
-          sticker-package-id: 8522
+    - name: create notify message
+      uses: actions/github-script@v6
+      id: create_notify_message
+      with:
+        script: |
+          const commits = ${{ toJSON(github.event.commits) }}
+          if (commits === null) {
+            return `Build ${{github.repository}}#${{ github.ref_name }}\nManually build by ${{github.actor}}\n`
+          }
+          let string_commits = ''
+          for (let i = 0; i < 5 && i < commits.length-1 ; i++) {
+            string_commits += `- ${commits[i].message} by ${commits[i].author.username}\n`
+          }
+          if (commits.length > 5) {
+            string_commits += `... and ${commits.length - 5} more commit(s)\n`
+          }
+          let message = `Triggered ${{github.repository}}#${{ github.ref_name }}\nBuild triggered by ${{github.event.head_commit.author.username}} with commit message: ${{github.event.head_commit.message}}\n`
+          if (string_commits) {
+            message += `\nCommits:\n${string_commits}`
+          }
+          return message
+        result-encoding: string
+    - name: send notify message
+      uses: louis70109/line-notify-action@master
+      with:
+        token: ${{ secrets.LINE_NOTIFY_MYG }}
+        message: |
+          ${{steps.create_notify_message.outputs.result}}
+          [***FAILED***]
+        sticker_id: 51626530
+        package_id: 11538
