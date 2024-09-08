@@ -60,37 +60,28 @@
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
-
   *,
   *::before,
   *::after {
     box-sizing: border-box;
   }
-
+  
+  * {
+    margin: 0;
+  }
+  
+  html,
   body {
-    /* @apply bg-background text-foreground; */
-    user-select: none;
-    display: block;
+    height: 100%;
+  }
+  
+  body {
+    height: 100%;
+    line-height: 1.5;
+    overflow-y: auto;
   }
 
   body::-webkit-scrollbar {
     display: none;
-  }
-}
-
-@keyframes ripple {
-  0% {
-    background-position: 0% 50%;
-  }
-
-  50% {
-    background-position: 100% 50%;
-  }
-
-  100% {
-    background-position: 0% 50%;
   }
 }
