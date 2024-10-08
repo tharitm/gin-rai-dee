@@ -97,6 +97,7 @@ jobs:
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEB_HOOK }}
           GITHUB_JOB_STATUS: ${{ needs.build.result }}
+          DISCORD_USERNAME: GEORGE
         with:
           line: true
           discord: true
