@@ -87,3 +87,16 @@ jobs:
           [***FAILED***]
         sticker_id: 11069858
         package_id: 6359
+  notify:
+    runs-on: ubuntu-latest
+    needs: [build]
+    if: always()
+    steps:
+      - name: notification
+        uses: tharitm/action-discord@master
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEB_HOOK }}
+          GITHUB_JOB_STATUS: ${{ needs.build.result }}
+        with:
+          line: true
+          discord: true
