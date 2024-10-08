@@ -93,7 +93,7 @@ jobs:
     if: always()
     steps:
       - name: notification
-        uses: bawop443/action-discord@master
+        uses: tharitm/action-discord@master
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEB_HOOK }}
           GITHUB_JOB_STATUS: ${{ needs.build.result }}
