@@ -29,21 +29,24 @@ const Transition = () => {
     };
     return (
         <>
-            <div className="absolute top-0 left-0 mt-[2rem] ml-[2rem] sm:ml-[1.5rem] sm:mt-[2rem] md:ml-[4rem] md:mt-[3rem] z-[99]">
-                <motion.button
-                    className="text-white "
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    initial={{ opacity: 0, y: 0 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ type: 'spring', stiffness: 300 }}
-                    onClick={handleBack}
-                >
-                    <CircleChevronLeft
+            {currentPage !== 1 && (
+                <div className="absolute top-0 left-0 mt-[2rem] ml-[2rem] sm:ml-[1.5rem] sm:mt-[2rem] md:ml-[4rem] md:mt-[3rem] z-[99]">
+                    <motion.button
+                        className="text-white "
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        initial={{ opacity: 0, y: 0 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ type: 'spring', stiffness: 300 }}
                         onClick={handleBack}
-                    />
-                </motion.button>
-            </div>
+                    >
+                        <CircleChevronLeft
+                            onClick={handleBack}
+                        />
+                    </motion.button>
+                </div>
+            )
+            }
             {currentPage === 1 && (
                 <Hero />
             )}
