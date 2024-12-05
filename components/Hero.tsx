@@ -1,22 +1,42 @@
 'use client'
 import { popularDishesSequence } from '@/constant/FoodMenu'
 import { AnimatePresence, motion } from 'framer-motion'
-import React from 'react'
+import React, { useState } from 'react'
 import { TypeAnimation } from 'react-type-animation'
 import TextAnimation from './TextAnimation'
-import { ArrowRight, ArrowUpRightIcon, Bot, LucideX, MoveRight } from 'lucide-react'
+import { ArrowRight, ArrowUpRightIcon, Bot, LucideX, MoveRight, RefreshCw } from 'lucide-react'
 import { useStepStore } from '@/lib/useStepStore'
+import MessageBox from './MessageBox'
+import askAI from '@/lib/gemini'
 
-const variants = {
-  hidden: { opacity: 0, y: 50 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-  exit: { opacity: 0, y: -50, transition: { duration: 0.5 } },
-};
+export interface FormattedResponse {
+  menu: string;
+  description: string;
+  icon: string;
+}
 
 function Hero() {
   const { setPage, setStep, currentPage, currentStep } = useStepStore()
+  const [aiResult, setAiResult] = useState<FormattedResponse[]>([]);
 
-  const handleClick = (step: number) => {
+  const sanitizeResult = (result: string) => {
+    let cleanResult = result.trim();
+
+    const match = cleanResult.match(/\[([\s\S]*)\]/);
+    if (match) {
+      cleanResult = match[0];
+    }
+
+    return cleanResult;
+  };
+
+  const handleClick = async (step: number) => {
+    if (step === 2) {
+      const result = await askAI('สร้าง JSON แนะนำเมนูอาหารมา 5 รายการ ได้มี 3 Key คือ menu , description , icon สำหรับ key icon ขอแค่ 1-2 ตัวก็พอครับ และขอรายละเอียดอาหารตอบเป็นรูปแบบแนะนำเพื่อนได้มั้ย เหมือนคุณกับผมเป็นเพื่อนกัน ใช้ภาษาวัยรุ่น');
+      const sanitizedPlainText = sanitizeResult(result);
+      const finalResult = JSON.parse(sanitizedPlainText);
+      setAiResult(finalResult)
+    }
     setStep(step);
   };
 
@@ -37,7 +57,7 @@ function Hero() {
         icon: "🗨️",
         title: "Let's Start Talking with AI",
         description: "Ready to chat?",
-        buttonIcon: <Bot className="w-5 h-5 text-white" />,
+        buttonIcon: <RefreshCw className='w-h h-5 text-white' />,
         buttonColor: "bg-blue-500 hover:bg-blue-700",
         handleClick: () => handleClick(1),
       };
@@ -73,11 +93,25 @@ function Hero() {
           </div>
         </div>
       </motion.div>
+
+      {currentStep === 2 && (
+        <>
+          <motion.div
+            initial={{ opacity: 0, y: 0 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 0 }}
+            transition={{ duration: 1.5, delay: 0.5 }}
+            className="mx-auto p-5 w-full xl:max-w-[50%]"
+          >
+            <MessageBox items={aiResult} />
+          </motion.div>
+        </>
+      )}
       <motion.div
-        className="relative w-full flex justify-center item-center"
+        className="absolute w-full flex justify-center item-center"
         animate={{
           opacity: 1,
-          y: "50dvh",
+          y: "80dvh",
         }}
         transition={{ duration: 0.5 }}
       >
@@ -87,7 +121,7 @@ function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="relative w-full max-w-[90vw] lg:max-w-xl px-2">
+          <div className="relative w-full max-w-[90vw] xl:max-w-[50%] px-2">
             <div className="overflow-hidden">
               <div className="flex -ml-4">
                 <div className="min-w-0 shrink-0 grow-0 basis-full pl-4 pb-2">
@@ -98,7 +132,7 @@ function Hero() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 0 }}
                       transition={{ duration: 0.5 }}
-                      className="p-5 py-7 xl:py-[3%] bg-zinc-800 rounded-3xl flex gap-4 shadow"
+                      className="p-5 py-7 md:py-[1%] bg-zinc-800 rounded-3xl flex gap-4 shadow"
                     >
                       <div className="w-12 h-12 md:w-24 md:h-24 flex-shrink-0 flex items-center justify-center text-4xl md:text-6xl">
                         {stepContent.icon}
@@ -111,14 +145,14 @@ function Hero() {
                           {stepContent.description}
                         </div>
                       </div>
-                      <div className="flex items-center justify-center">
+                      {stepContent.buttonIcon && (<div className="flex items-center justify-center">
                         <div
                           className={`w-12 h-12 flex items-center justify-center rounded-xl transition ${stepContent.buttonColor} hover:cursor-pointer`}
                           onClick={stepContent.handleClick}
                         >
                           {stepContent.buttonIcon}
                         </div>
-                      </div>
+                      </div>)}
                     </motion.div>
                   </AnimatePresence>
                 </div>
