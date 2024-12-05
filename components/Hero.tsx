@@ -8,6 +8,7 @@ import { ArrowRight, ArrowUpRightIcon, Bot, LucideX, MoveRight, RefreshCw } from
 import { useStepStore } from '@/lib/useStepStore'
 import MessageBox from './MessageBox'
 import askAI from '@/lib/gemini'
+import { useFoodStore } from '@/lib/useFoodStore'
 
 export interface FormattedResponse {
   menu: string;
@@ -17,7 +18,7 @@ export interface FormattedResponse {
 
 function Hero() {
   const { setPage, setStep, currentPage, currentStep } = useStepStore()
-  const [aiResult, setAiResult] = useState<FormattedResponse[]>([]);
+  const { setItems } = useFoodStore();
 
   const sanitizeResult = (result: string) => {
     let cleanResult = result.trim();
@@ -32,10 +33,10 @@ function Hero() {
 
   const handleClick = async (step: number) => {
     if (step === 2) {
-      const result = await askAI('สร้าง JSON แนะนำเมนูอาหารมา 5 รายการ ได้มี 3 Key คือ menu , description , icon สำหรับ key icon ขอแค่ 1-2 ตัวก็พอครับ และขอรายละเอียดอาหารตอบเป็นรูปแบบแนะนำเพื่อนได้มั้ย เหมือนคุณกับผมเป็นเพื่อนกัน ใช้ภาษาวัยรุ่น');
+      const result = await askAI('สร้าง JSON แนะนำเมนูอาหารมา 5 รายการ ได้มี 3 Key คือ menu , description , icon สำหรับ key icon ขอแค่ 1 ตัวก็พอครับ และขอรายละเอียดอาหารตอบเป็นใช้ภาษาวัยรุ่น');
       const sanitizedPlainText = sanitizeResult(result);
       const finalResult = JSON.parse(sanitizedPlainText);
-      setAiResult(finalResult)
+      setItems(finalResult);
     }
     setStep(step);
   };
@@ -54,11 +55,11 @@ function Hero() {
     } else if (step === 2) {
       return {
         id: 2,
-        icon: "🗨️",
-        title: "Let's Start Talking with AI",
-        description: "Ready to chat?",
+        icon: "🤖", 
+        title: "AI's Food Suggestion", 
+        description: "Enjoy your meal!",  
         buttonIcon: <RefreshCw className='w-h h-5 text-white' />,
-        buttonColor: "bg-blue-500 hover:bg-blue-700",
+        buttonColor: "bg-green-500 hover:bg-green-700",  
         handleClick: () => handleClick(1),
       };
     }
@@ -103,7 +104,7 @@ function Hero() {
             transition={{ duration: 1.5, delay: 0.5 }}
             className="mx-auto p-5 w-full xl:max-w-[50%]"
           >
-            <MessageBox items={aiResult} />
+            <MessageBox />
           </motion.div>
         </>
       )}
@@ -116,7 +117,7 @@ function Hero() {
         transition={{ duration: 0.5 }}
       >
         <motion.div
-          className={`relative w-full flex justify-center items-center`}
+          className={`flex mx-auto p-5 w-full justify-center items-center `}
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -132,7 +133,7 @@ function Hero() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 0 }}
                       transition={{ duration: 0.5 }}
-                      className="p-5 py-7 md:py-[1%] bg-zinc-800 rounded-3xl flex gap-4 shadow"
+                      className="p-5 py-7 md:py-[1%] bg-zinc-800 rounded-2xl flex gap-4 shadow"
                     >
                       <div className="w-12 h-12 md:w-24 md:h-24 flex-shrink-0 flex items-center justify-center text-4xl md:text-6xl">
                         {stepContent.icon}
