@@ -1,7 +1,7 @@
 import { useStepStore } from '@/lib/useStepStore';
 import { AnimatePresence, motion } from 'framer-motion'
 import Hero from './Hero';
-import { ArrowLeft, CircleChevronLeft, MoveLeft } from 'lucide-react';
+import { ArrowLeft, CircleChevronLeft, LucideX, MoveLeft } from 'lucide-react';
 
 const pageVariants = {
     initial: {
@@ -48,18 +48,19 @@ const Transition = () => {
             )
             }
             {currentPage === 1 && (
-                <Hero />
+                <>
+                    {<Hero />}
+
+                </>
             )}
             {currentPage === 2 && (
                 <motion.div
                     key="page-2"
-                    initial="initial"
-                    animate="in"
-                    exit="out"
-                    variants={pageVariants}
-                    transition={{ duration: 0.5 }}
+                    initial={{ scale: 1 }}
+                    animate={{ scale: 1.5 }}
+                    transition={{ duration: 0.5, ease: [0.6, 0.01, -0.05, 0.9] }}
                 >
-                    <div className="h-dvh bg-zinc-800 flex justify-center items-center">
+                    <div className="h-dvh bg-zinc-900 flex justify-center items-center">
                         <span className="text-white text-5xl">
                             Page 2 Content
                         </span>

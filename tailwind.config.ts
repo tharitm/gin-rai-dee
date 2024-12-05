@@ -52,6 +52,11 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        crimson: {
+          light: "#eb2e67", // สีฟ้าอ่อน
+          DEFAULT: "#E91756", // สีฟ้าหลัก
+          dark: "#ba1245", // สีฟ้าเข้ม
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
